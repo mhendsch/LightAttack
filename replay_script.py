@@ -2,8 +2,8 @@ import asyncio
 from bleak import BleakClient
 
 BULB_MAC = "E5:90:03:46:53:18"
-CHAR_UUID = "00010203-0405-0607-0809-0a0b0c0d2b11"  # from your capture
-PAYLOAD = bytes.fromhex("33051501ff00000000000000ff7f00000000005d")           # your captured value
+CHAR_UUID = "00010203-0405-0607-0809-0a0b0c0d2b11"  # UUID from handshake
+PAYLOAD = bytes.fromhex("33051501ff00000000000000ff7f00000000005d")           # Example payload (data) of packet
 """
 Yellow: 33051501ffff000000000000ff7f0000000000a2
 Green:  3305150100ff000000000000ff7f00000000005d
@@ -19,7 +19,7 @@ Strobe_low = bytes.fromhex( "3305130563000000000000000000000000000043")
 Strobe_high = bytes.fromhex("3305130363000000000000000000000000000045")
 Strobe_weird = bytes.fromhex("3305130463000000000000000000000000000042")
 Epilepsy = bytes.fromhex(    "3305130332000000000000000000000000000014")
-Segmented_blue_red = bytes.fromhex("33050a200300000000000000000000000000001f")  # same as red, but captured in a different session
+Segmented_blue_red = bytes.fromhex("33050a200300000000000000000000000000001f") 
 """"
 samples = [
     "33051501ffff0000000000ff7f00000000000000ca",
