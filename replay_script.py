@@ -20,54 +20,20 @@ Strobe_high = bytes.fromhex("3305130363000000000000000000000000000045")
 Strobe_weird = bytes.fromhex("3305130463000000000000000000000000000042")
 Epilepsy = bytes.fromhex(    "3305130332000000000000000000000000000014")
 Segmented_blue_red = bytes.fromhex("33050a200300000000000000000000000000001f") 
-""""
-samples = [
-    "33051501ffff0000000000ff7f00000000000000ca",
-    "33051501ff800000000000ff7f000000000000004b",
-    "3305150180008000000000ff7f00000000000000cc",
-]
 
-for s in samples:
-    b = bytes.fromhex(s)
-    actual = b[-1]
-    data = b[:-1]
-    
-    total = sum(data)
-    xor = 0
-    for byte in data: xor ^= byte
-    
-    print(f"Actual: {hex(actual)} ({actual})")
-    print(f"  sum % 256        = {hex(total % 256)}")
-    print(f"  (sum % 256) ^ ff = {hex((total % 256) ^ 0xff)}")
-    print(f"  (~sum) % 256     = {hex((~total) % 256)}")
-    print(f"  xor              = {hex(xor)}")
-    print(f"  (xor) ^ ff       = {hex(xor ^ 0xff)}")
-    print(f"  (256 - sum%256)  = {hex((256 - total%256) % 256)}")
-    print()
-"""
+# Try to calculate last byte of payload
 target = bytes.fromhex("33051501ffff000000000000ff7f0000000000a2")
 data = target[:-1]
 actual = target[-1]  # 0x5d = 93
 
-# Try XOR of slices
+# Try XOR of slices for last byte
 for start in range(len(data)):
     xor = 0
     for b in data[start:]:
         xor ^= b
     if xor == actual:
-        print(f"XOR data[{start}:] = {hex(xor)} ✓")
+        print(f"XOR data[{start}:] = {hex(xor)}")
 
-# Try sum of slices with various modifiers
-for start in range(len(data)):
-    s = sum(data[start:]) % 256
-    if (s ^ 0xff) == actual:
-        print(f"(sum(data[{start}:]) ^ 0xff) = {hex(s ^ 0xff)} ✓")
-    if (256 - s) % 256 == actual:
-        print(f"(256 - sum(data[{start}:])) = {hex((256-s)%256)} ✓")
-
-# Maybe it includes the checksum byte itself?
-full = sum(target) % 256
-print(f"sum(full packet) % 256 = {hex(full)}")
 
 async def discover():
     async with BleakClient(BULB_MAC) as client:
