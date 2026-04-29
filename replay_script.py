@@ -425,11 +425,13 @@ def set_color(r, g, b, seg_numbers=None):
     payload[13] = b13
     return build_command(payload)
 
+"""
 # Examples
 asyncio.run(replay(set_color(255, 0, 0)))                      # all red
 asyncio.run(replay(set_color(0, 255, 0, [1,2,3])))             # segs 1-3 green
 asyncio.run(replay(set_color(0, 0, 255, range(8, 15))))        # segs 8-14 blue
 asyncio.run(replay(set_color(255, 0, 255, [1,3,5,7,9,11,13]))) # alternating purple
+"""
     
 while True:
     color = input("Enter color (yellow, green, blue, red, purple, strobe_low, strobe_high, strobe_weird, epilepsy, segmented_blue_red) or 'exit' to quit: ").strip().lower()
@@ -456,16 +458,25 @@ while True:
     elif color == 'segmented_blue_red':
         asyncio.run(replay(Segmented_blue_red))
     elif color == 'custom':
-        rgb_input = input("Enter RGB values (e.g. 255,0,0 for red): ")
         try:
+            rgb_input = input("Enter RGB values (e.g. 255,0,0 for red): ")
             r, g, b = map(int, rgb_input.split(','))
             if not all(0 <= val <= 255 for val in (r, g, b)):
                 raise ValueError("RGB values must be between 0 and 255.")
-            custom_payload = bytes.fromhex(f"33051501{r:02x}{g:02x}{b:02x}000000000000ff7f00000000")
-            command = build_command(custom_payload)
-            print(f"Payload length: {len(command)}, hex: {command.hex()}")  # debug
+
+            seg_input = input("Enter segments (e.g. 1,2,3 or press Enter for all): ").strip()
+            if seg_input:
+                seg_numbers = list(map(int, seg_input.split(',')))
+                if not all(1 <= s <= 14 for s in seg_numbers):
+                    raise ValueError("Segment numbers must be between 1 and 14.")
+            else:
+                seg_numbers = None  # all segments
+
+            command = set_color(r, g, b, seg_numbers)
+            print(f"Payload length: {len(command)}, hex: {command.hex()}")
             asyncio.run(replay(command))
-        except (ValueError, IndexError):
-            print("Invalid RGB values. Please enter three integers between 0 and 255, separated by commas.")
+
+        except (ValueError, IndexError) as e:
+                print(f"Invalid input: {e}")
     else:
         print("Invalid color. Please enter yellow, green, blue, red, purple, strobe_low, strobe_high, strobe_weird, epilepsy, or segmented_blue_red.")
