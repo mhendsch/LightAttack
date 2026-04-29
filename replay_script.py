@@ -434,7 +434,7 @@ asyncio.run(replay(set_color(255, 0, 255, [1,3,5,7,9,11,13]))) # alternating pur
 """
     
 while True:
-    color = input("Enter color (yellow, green, blue, red, purple, strobe_low, strobe_high, strobe_weird, epilepsy, segmented_blue_red) or 'exit' to quit: ").strip().lower()
+    color = input("Enter color (yellow, green, blue, red, purple, strobe_low, strobe_high, strobe_weird, epilepsy, segmented_blue_red, custom) or 'exit' to quit: ").strip().lower()
     if color == 'exit':
         break
     elif color == 'yellow':
@@ -479,4 +479,4 @@ while True:
         except (ValueError, IndexError) as e:
                 print(f"Invalid input: {e}")
     else:
-        print("Invalid color. Please enter yellow, green, blue, red, purple, strobe_low, strobe_high, strobe_weird, epilepsy, or segmented_blue_red.")
+        print("Invalid color. Please enter yellow, green, blue, red, purple, strobe_low, strobe_high, strobe_weird, epilepsy, segmented_blue_red, or custom.")
