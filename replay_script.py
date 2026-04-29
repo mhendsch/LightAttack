@@ -397,7 +397,7 @@ SEG = {
     14: (0x01, 0x00),
 }
 
-ALL_SEGMENTS = (0x7F, 0x7F)
+ALL_SEGMENTS = (0xFF, 0x7F)
 
 def segments_mask(*seg_numbers):
     """Build (byte12, byte13) mask for given segment numbers."""
